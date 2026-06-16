@@ -1,2 +1,43 @@
 # Python-Nuke-TD
 Writing codes for nuke 
+import nuke
+def create_setup():
+    path=nuke.getFilename("Select an image")
+    if path:
+       read=nuke.nodes.Read(file=path)
+       colorspace=nuke.nodes.Colorspace()
+       colorspace.setInput(0,read)
+       reformat=nuke.nodes.Reformat()
+       reformat.setInput(0,colorspace)
+       transform=nuke.nodes.Transform()
+       transform.setInput(0,reformat)
+       grade=nuke.nodes.Grade()
+       grade.setInput(0,transform)
+       grade["multiply"].setValue(1.5)
+       blur=nuke.nodes.Blur()
+       blur.setInput(0,grade)
+       blur["size"].setValue(20)
+       premult=nuke.nodes.Premult()
+       premult.setInput(0,blur)
+       write=nuke.nodes.Write()
+       write.setInput(0,premult)
+       write["file"].setValue(
+           "[file dirname [value root.name]]/render/output.%04d.exr"
+       )
+       read.setXYpos(100,100)
+       nodes=[colorspace,reformat,transform,grade,blur,premult,write]
+       y=read.ypos()+100
+       for node in nodes:
+           node.setXYpos(read.xpos(),y)
+           y+=100
+       backdrop=nuke.nodes.BackdropNode(
+           xpos=read.xpos()-100,
+           ypos=read.ypos()-50,
+           bdwidth=350,
+           bdheight=len(nodes)*100+200,
+           label="Auto Comp Setup"
+       )
+       nuke.message("Comp Setup Complete")
+toolbar=nuke.menu("Nuke")
+my_menu=toolbar.addMenu("My Toolbar")
+my_menu.addCommand("Auto Comp Setup",create_setup)
