@@ -1,0 +1,10 @@
+import nuke
+def rename_selected_nodes():
+    nodes=nuke.selectedNodes()
+    if not nodes:
+       nuke.message("Please select atleast one node")
+       return
+    count=1
+    for node in nodes:
+        node.setName(node.Class()+"_Auto"+str(count))
+        count+=1
