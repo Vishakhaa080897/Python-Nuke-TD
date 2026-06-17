@@ -1,0 +1,8 @@
+import nuke
+def auto_label_selected():
+    nodes = nuke.selectedNodes()
+    if not nodes:
+       nuke.message("Please select a node")
+       return
+    for node in nodes:
+        node["label"].setValue(node.Class())
