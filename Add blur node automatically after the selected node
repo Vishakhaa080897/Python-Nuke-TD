@@ -1,0 +1,14 @@
+import nuke
+def add_blur_to_selected():
+    nodes = nuke.selectedNodes()
+    if not nodes:
+       nuke.message("Please select at least one node.")
+       return
+       for node in nodes:
+           blur = nuke.nodes.Blur()
+           blur.setInput(0, node)
+           blur["size"].setValue(10)
+           blur.setXYpos(
+             node.xpos(),
+             node.ypos() + 100
+        )
