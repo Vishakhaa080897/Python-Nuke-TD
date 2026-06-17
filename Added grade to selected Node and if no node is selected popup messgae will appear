@@ -1,0 +1,12 @@
+import nuke
+try:
+    node = nuke.selectedNode()
+    if node.Class() == "Read":
+       grade = nuke.nodes.Grade()
+       grade.setInput(0, node)
+       grade["multiply"].setValue(1.5)
+       grade["label"].setValue("Auto Grade")
+    else:
+       nuke.message("Please select a Read node.")
+except:
+    nuke.message("Please select a Read node.")
