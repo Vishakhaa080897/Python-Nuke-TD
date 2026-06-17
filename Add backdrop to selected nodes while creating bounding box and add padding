@@ -1,0 +1,18 @@
+import nuke
+def add_backdrop_to_selected():
+    nodes = nuke.selectedNodes()
+    if not nodes:
+       nuke.message("Please select at least one node.")
+       return
+    min_x = min(node.xpos() for node in nodes)
+    max_x = max(node.xpos() for node in nodes)
+    min_y = min(node.ypos() for node in nodes)
+    max_y = max(node.ypos() for node in nodes)
+    padding = 50
+    nuke.nodes.BackdropNode(
+        xpos=min_x - padding,
+        ypos=min_y - padding,
+        bdwidth=(max_x - min_x) + (padding * 2),
+        bdheight=(max_y - min_y) + (padding * 2),
+        label="Selected Nodes"
+    )
