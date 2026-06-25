@@ -1,38 +1,4 @@
-import nuke
-def create_custom_blur():
-    path=nuke.getFilename("Select any Image")
-    if not path:
-        return
-    read=nuke.nodes.Read()
-    blur=nuke.nodes.Blur()
-    blur.setInput(0,read)
-    size=nuke.getInput("Enter blur node size","20")
-    if size and float(size)>=0:
-       blur["size"].setValue(float(size))
-    else:
-        nuke.message("Please Enter a valid size")
-    name=nuke.getInput("Enter blur node")
-    if name:
-       blur["label"].setValue(name)
-    filter_type=nuke.getInput(
-        "enter blur filter type(cubic,gaussian,box)",
-        "gaussion"
-    )
-    if filter_type and filter_type.lower()                                 in("cubic","gaussian","box"):
-        blur["filter"].setValue(filter_type.lower())
-    else:
-        nuke.message("Please enter a valid filter")
-    mix=nuke.getInput("enter blur mix(0-1)","1")
-    if 0<=mix<=1:
-       blur["mix"].setValue(mix)
-    else:
-        nuke.message("Enter a valid mix")
-    if nuke.activeViewer():
-       viewer=nuke.activeViewer().node()
-       viewer.setInput(0,blur)
-toolbar=nuke.menu("Nuke")
-my_menu=toolbar.addMenu("My Toolbar")
-my_menu.addCommand("Custom Blur",create_custom_blur) 
+
 # create custom blur viewer node
 import nuke
 def create_blur_viewer_node():
@@ -54,7 +20,7 @@ def create_blur_viewer_node():
     name=nuke.getInput("Enter blur label","Blur Node")
     if name:
         blur["label"].setValue(name)
-    filter_type=nuke.getInput("Enter Filter type(box,gaussian,cubic)","Gaussian")
+    filter_type=nuke.getInput("Enter Filter type(box,gaussian,cubic)","gaussian")
     if filter_type and filter_type.lower()in ("box","gaussian","cubic"):
        blur["filter"].setValue(filter_type.lower())
     mix=nuke.getInput("Enter mix between(0-1)","1")
